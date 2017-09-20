@@ -1,70 +1,59 @@
-require "getpics/version"
-require 'gphoto2'
+require 'fileutils'
+require 'ruby-progressbar'
 
 module Getpics
+
     class Downloader
-        MAGNITUDES = %w[bytes KiB MiB GiB].freeze
-
         def initialize
-            @cameras = GPhoto2::Camera.all
-            if @cameras.empty?
-                puts "No cameras found!"
-            else
-                @cameras.map { |c| [c.model, c.port] }
-            end
+            @pics = []
+            @src_dir = ""
         end
 
-        # @param [Integer] size filesize in bytes
-        # @param [Integer[ precision
-        # @return [String]
-        def format_filesize(size, precision = 1)
-            n = 0
-
-            while size >= 1024.0 && n < MAGNITUDES.size
-                size /= 1024.0
-                n += 1
-            end
-
-            "%.#{precision}f %s" % [size, MAGNITUDES[n]]
-        end
-
-        # @param [CameraFolder] folder a root directory
-        def visit(folder)
-            files = folder.files
-
-            puts "#{folder.path} (#{files.size} files)"
-
+        def load_pics(dir)
+            @src_dir = dir
+            files = Dir.glob(@src_dir + "/**/*").reject { |p| File.directory? p }
             files.each do |file|
-                info = file.info
+                if file.match(/\.NEF/) or file.match(/\.jpg/)
+                    @pics << Photo.new(file)
+                end
+            end
+            if @pics.size == 0
+                puts "No pictures found!"
+                exit 1
+            end
+            puts "Found #{@pics.size} pictures."
+        end
 
-                name = file.name
-                # Avoid using `File#size` here to prevent having to load the data along
-                # with it.
-                size = format_filesize(info.size)
-                mtime = info.mtime.utc.iso8601
-
-                if info.has_field?(:width) && info.has_field?(:height)
-                    dimensions = "#{info.width}x#{info.height}"
+        def copy_pics(dest_root)
+            pb = ProgressBar.create(:title => "Images Copied", :total => @pics.size)
+            @pics.each do |pic|
+                if pic.type == 'raw'
+                    type_folder = 'RAW'
                 else
-                    dimensions = '-'
+                    type_folder = 'developed'
                 end
 
-                puts "#{name.ljust(30)}  #{size.rjust(12)}  #{dimensions.rjust(12)}  #{mtime}"
+                pic_folder = "#{dest_root}/#{type_folder}/#{pic.date.year}/#{pic.date.month}/#{pic.date.day}"
+                FileUtils.mkdir_p(pic_folder)
+
+                FileUtils.cp(pic.path, pic_folder)
+                pb.increment
             end
-
-            puts
-
-            folder.folders.each { |child| visit(child) }
         end
 
-        def list_files
-            if ! @cameras.empty?
-            @cameras.first do |camera|
-                visit(camera.filesystem)
-            end
+        def delete_pics
+            puts "Do you want to delete #{@pics.size} pics from #{@src_dir}? [y/N]"
+            confirm = gets.strip
+            if confirm == "y"
+                pb = ProgressBar.create(:title => "Images Deleted", :total => @pics.size)
+                @pics.each do |pic|
+                    FileUtils.rm(pic.path)
+                    pb.increment
+                end
             else
-                puts "No cameras found so there's nothing to list!"
+                puts "Deletion cancelled."
             end
         end
     end
+
 end

@@ -2,6 +2,22 @@
 
 require "bundler/setup"
 require "getpics"
+require 'optparse'
+
+options = {}
+OptionParser.new do |opts|
+    opts.banner = "Usage: getpics [options]"
+
+    opts.on("-s", "--src DIR", "Source directory") do |s|
+        options[:src] = s
+    end
+
+    opts.on("-d", "--dest DIR", "Destination directory") do |d|
+        options[:dest] = d
+    end
+end.parse!
 
 dl = Getpics::Downloader.new
-dl.list_files
+dl.load_pics(options[:src])
+dl.copy_pics(options[:dest])
+dl.delete_pics

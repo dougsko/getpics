@@ -3,4 +3,6 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in getpics.gemspec
 gemspec
 
-gem 'ffi-gphoto2', :git => 'https://github.com/zaeleus/ffi-gphoto2'
+#gem 'exiv2-ruby', :git => 'https://github.com/stestaub/exiv2-ruby'
+gem 'exiv2', :git => 'https://github.com/envato/exiv2'
+gem 'ruby-progressbar'
