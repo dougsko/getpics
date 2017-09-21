@@ -62,7 +62,7 @@ module Getpics
             pics = []
             files = Dir.glob(dir + "/RAW/**/*").reject { |p| File.directory? p }
             files.each do |file|
-                if file.match(/\.NEF$/) or file.match(/\.jpg$/)
+                if file.match(/\.NEF$/) or file.match(/\.jpg$/) or file.match(/\.dng$/)
                     pics << Photo.new(file)
                 end
             end
