@@ -20,4 +20,5 @@ end.parse!
 dl = Getpics::Downloader.new
 dl.load_pics(options[:src])
 dl.copy_pics(options[:dest])
-dl.delete_pics
+dl.rename_pics(options[:dest])
+#dl.delete_pics

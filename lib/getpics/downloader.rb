@@ -7,13 +7,14 @@ module Getpics
         def initialize
             @pics = []
             @src_dir = ""
+            @dest_root = ""
         end
 
         def load_pics(dir)
             @src_dir = dir
             files = Dir.glob(@src_dir + "/**/*").reject { |p| File.directory? p }
             files.each do |file|
-                if file.match(/\.NEF/) or file.match(/\.jpg/)
+                if file.match(/\.NEF$/) or file.match(/\.jpg$/)
                     @pics << Photo.new(file)
                 end
             end
@@ -25,6 +26,7 @@ module Getpics
         end
 
         def copy_pics(dest_root)
+            @dest_root = dest_root
             pb = ProgressBar.create(:title => "Images Copied", :total => @pics.size)
             @pics.each do |pic|
                 if pic.type == 'raw'
@@ -33,7 +35,7 @@ module Getpics
                     type_folder = 'developed'
                 end
 
-                pic_folder = "#{dest_root}/#{type_folder}/#{pic.date.year}/#{pic.date.month}/#{pic.date.day}"
+                pic_folder = "#{@dest_root}/#{type_folder}/#{pic.date.year}/#{pic.date.month}/#{pic.date.day}"
                 FileUtils.mkdir_p(pic_folder)
 
                 FileUtils.cp(pic.path, pic_folder)
@@ -54,6 +56,21 @@ module Getpics
                 puts "Deletion cancelled."
             end
         end
+
+        def rename_pics(dir)
+            puts "Renaming pics"
+            pics = []
+            files = Dir.glob(dir + "/RAW/**/*").reject { |p| File.directory? p }
+            files.each do |file|
+                if file.match(/\.NEF$/) or file.match(/\.jpg$/)
+                    pics << Photo.new(file)
+                end
+            end
+            pics.each do |pic|
+                File.rename(pic.path, "#{File.dirname(pic.path)}" + "/" + "#{pic.date.strftime("%Y%m%d")}" + "#{pic.name}")
+            end
+        end
+
     end
 
 end

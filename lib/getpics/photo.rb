@@ -1,5 +1,5 @@
-require 'exiv2'
 require 'date'
+require 'mini_exiftool'
 
 module Getpics
 
@@ -8,10 +8,9 @@ module Getpics
 
         def initialize(path)
             @path = path
-            @name = File.basename(@path) + File.extname(@path)
-            image = Exiv2::ImageFactory.open("#{@path}")
-            image.read_metadata
-            @date = Date.strptime(image.exif_data["Exif.Image.DateTime"], "%Y:%m:%d %H:%M:%S")
+            @name = File.basename(@path)
+            image = MiniExiftool.new(@path) 
+            @date = DateTime.parse(image.CreateDate.to_s)
             if File.extname(@path) == ".NEF"
                 @type = 'raw'
             else
