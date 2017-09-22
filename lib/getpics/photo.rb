@@ -11,7 +11,12 @@ module Getpics
             @path = path
             @orig_path = path
             @name = File.basename(@path)
-            image = MiniExiftool.new(@path) 
+            begin
+                image = MiniExiftool.new(@path)
+            rescue
+                puts "Error while loading #{@path}".red
+            end
+
             begin
                 @date = DateTime.parse(image.CreateDate.to_s)
             rescue

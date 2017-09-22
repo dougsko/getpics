@@ -13,7 +13,8 @@ module Getpics
             @src_dir = dir
             files = Dir.glob(@src_dir + "/**/*").reject { |p| File.directory? p }
             files.each do |file|
-                if file.match(/\.NEF$/i) or file.match(/\.jpg$/i) or file.match(/\.dng$/i)
+                #if file.match(/\.NEF$/i) or file.match(/\.jpg$/i) or file.match(/\.dng$/i)
+                if ! file.match(/\.xmp$/i)
                     @pics << Photo.new(file)
                 end
             end
@@ -37,7 +38,7 @@ module Getpics
 
                 pic_folder = "#{@dest_root}/#{type_folder}/#{pic.date.year}/#{pic.date.month}/#{pic.date.day}"
                 if ! File.exists?("#{pic_folder}/#{pic.date.strftime("%Y%m%d")}" + "#{pic.name}")
-                    pb.log "Copying #{pic.path} to #{pic_folder}".light_black if @verbose
+                    pb.log ("Copying #{pic.path} to #{pic_folder}" + "/#{pic.date.strftime("%Y%m%d")}" + "#{pic.name}").light_black if @verbose
                     FileUtils.mkdir_p(pic_folder)
                     FileUtils.cp(pic.path, pic_folder + "/" +  "#{pic.date.strftime("%Y%m%d")}" + "#{pic.name}")
                     pic.path = "#{pic_folder}/#{pic.name}"
