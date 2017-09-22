@@ -5,4 +5,5 @@ gemspec
 
 gem 'mini_exiftool'
 gem 'ruby-progressbar'
+gem 'colorize'
 

@@ -4,6 +4,8 @@ require "bundler/setup"
 require "getpics"
 require 'optparse'
 
+ARGV << '-h' if ARGV.empty?
+
 options = {}
 OptionParser.new do |opts|
     opts.banner = "Usage: getpics [options]"
@@ -15,10 +17,25 @@ OptionParser.new do |opts|
     opts.on("-d", "--dest DIR", "Destination directory") do |d|
         options[:dest] = d
     end
+
+    opts.on("-v", "--verbose", "Verbose") do |v|
+        options[:verbose] = v
+    end
+
+    opts.on_tail("-h", "--help", "Show this message") do
+        puts opts
+        exit
+    end
 end.parse!
 
-dl = Getpics::Downloader.new
+dl = Getpics::Downloader.new(options[:verbose])
 dl.load_pics(options[:src])
 dl.copy_pics(options[:dest])
-dl.rename_pics(options[:dest])
-#dl.delete_pics
+
+puts "Do you want to delete the pictures from #{options[:src]}? [y/N]".yellow
+delete = gets.strip
+if delete == 'y'
+    dl.delete_pics
+end
+
+puts "All finished!".green
