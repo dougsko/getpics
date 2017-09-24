@@ -36,7 +36,7 @@ module Getpics
                     type_folder = 'developed'
                 end
 
-                pic_folder = "#{@dest_root}/#{type_folder}/#{pic.date.year}/#{pic.date.month}/#{pic.date.day}"
+                pic_folder = "#{@dest_root}/#{type_folder}/#{pic.date.year}/#{pic.date.strftime("%m")}/#{pic.date.day}"
                 if ! File.exists?("#{pic_folder}/#{pic.date.strftime("%Y%m%d")}" + "#{pic.name}")
                     pb.log ("Copying #{pic.path} to #{pic_folder}" + "/#{pic.date.strftime("%Y%m%d")}" + "#{pic.name}").light_black if @verbose
                     FileUtils.mkdir_p(pic_folder)
