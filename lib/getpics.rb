@@ -1,6 +1,6 @@
 require "getpics/version"
 require 'getpics/downloader'
-require 'getpics/photo'
+require 'getpics/media'
 require 'colorize'
 require 'fileutils'
 require 'ruby-progressbar'

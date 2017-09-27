@@ -4,7 +4,7 @@ require 'colorize'
 
 module Getpics
 
-    class Photo
+    class Media
         attr_accessor :path, :orig_path, :name, :date, :type
 
         def initialize(path)
@@ -20,13 +20,17 @@ module Getpics
             begin
                 @date = DateTime.parse(image.CreateDate.to_s)
             rescue
-                puts "No valid CreateDate for #{@path}.  Using mtime (#{File.mtime(@path)})".yellow
+                puts "No valid CreateDate for #{@path}.  Using mtime (#{File.mtime(@path)})".light_black
                 @date = File.mtime(@path)
             end
             if File.extname(@path) == ".NEF" or File.extname(@path) == ".dng"
                 @type = 'raw'
+            elsif File.extname(@path) == ".jpg" or File.extname(@path) == ".JPG"
+                @type = 'developed'
+            elsif File.extname(@path) == ".MOV"
+                @type = 'movie'
             else
-                @type = 'jpg'
+                @type = 'unknown'
             end
         end
     end
