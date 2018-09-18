@@ -89,7 +89,7 @@ module Getpics
         end
 
         def is_known?
-            return true if @type.name != :unknown
+            return true if ! is_unknown?
             return false
         end
 
