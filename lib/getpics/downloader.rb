@@ -58,7 +58,7 @@ module Getpics
             end
             movies_to_process = []
             @media_list.movies.each do |movie|
-                dest_path = "#{movie.target_folder}/#{File.basename(movie.target_name, '.MOV')}.mp4"
+                dest_path = "#{movie.target_folder}/#{File.basename(movie.target_name, movie.extension)}.mp4"
                 if ! File.exists?(dest_path)
                     movies_to_process << movie
                 else

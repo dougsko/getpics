@@ -15,7 +15,8 @@ module Getpics
             @orig_path = path
             @name = File.basename(@path)
             @folder = File.dirname(@path)
-            @extension = File.extname(@path).downcase
+            @extension = File.extname(@path)
+            @down_case_extension = File.extname(@path).downcase
 
             if ! @name.match?(/^_/)
                 @name = "_" + @name
@@ -34,11 +35,11 @@ module Getpics
                 @date = File.mtime(@path)
             end
 
-            if RAW_EXTENSIONS.include?(@extension)
+            if RAW_EXTENSIONS.include?(@down_case_extension)
                 @type = RawType.new
-            elsif DEVELOPED_EXTENSIONS.include?(@extension)
+            elsif DEVELOPED_EXTENSIONS.include?(@down_case_extension)
                 @type = DevelopedType.new
-            elsif MOVIE_EXTENSIONS.include?(@extension)
+            elsif MOVIE_EXTENSIONS.include?(@down_case_extension)
                 @type = MovieType.new
             else
                 @type = UnknownType.new
