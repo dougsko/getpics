@@ -1,6 +1,8 @@
 # Getpics
 
-Use this script to copy and organize media files in one step.
+Use this script to copy and organize media files in one step. It will
+copy your files to a ```<dest>/YYYY/mm/dd/``` type folder structure, and add the
+file's creation date to its name.
 
 ## Installation
 
