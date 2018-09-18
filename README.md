@@ -3,7 +3,8 @@
 Use this script to copy and organize media files from your camera or
 other media source in one step. It will copy your files to a
 ```<dest>/YYYY/mm/dd/``` type folder structure, and add the file's
-creation date to its name.
+creation date to its name.  It can also optionally convert .MOV files to
+.MP4, using ```ffmpeg``` if it's installed on the system.
 
 ## Installation
 
