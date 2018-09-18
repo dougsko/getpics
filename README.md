@@ -8,13 +8,13 @@ Use this script to copy and organize media files in one step.
 
 ## Usage
 
-Usage: getpics [options]
-    -s, --src DIR                    Source directory
-    -p, --photo DIR                  Photo Destination directory
-    -m, --movie DIR                  Movie Destination directory
-    -v, --verbose                    Verbose
-    -h, --help                       Show this message
-Version: 0.2.0
+  Usage: getpics [options]
+      -s, --src DIR                    Source directory
+      -p, --photo DIR                  Photo Destination directory
+      -m, --movie DIR                  Movie Destination directory
+      -v, --verbose                    Verbose
+      -h, --help                       Show this message
+  Version: 0.2.0
 
 ## Contributing
 
