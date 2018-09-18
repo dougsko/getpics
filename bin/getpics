@@ -22,6 +22,10 @@ OptionParser.new do |opts|
         options[:movie_dest] = m
     end
 
+    opts.on("-c", "--convert", "Convert movies to mp4") do |c|
+        options[:convert] = c
+    end
+
     opts.on("-v", "--verbose", "Verbose") do |v|
         options[:verbose] = v
     end
@@ -36,7 +40,7 @@ end.parse!
 dl = Getpics::Downloader.new(options[:verbose], options[:src], options[:photo_dest], options[:movie_dest])
 dl.load_media
 dl.copy_media
-dl.convert_media
+dl.convert_media if options[:convert]
 
 puts "Do you want to delete the media from #{options[:src]}? [y/N]".yellow
 delete = gets.strip

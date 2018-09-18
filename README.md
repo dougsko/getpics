@@ -17,9 +17,10 @@ system.
         -s, --src DIR                    Source directory
         -p, --photo DIR                  Photo Destination directory
         -m, --movie DIR                  Movie Destination directory
+        -c, --convert                    Convert movies to mp4
         -v, --verbose                    Verbose
         -h, --help                       Show this message
-    Version: 0.2.0
+    Version: 0.2.1
 
 ## Contributing
 
