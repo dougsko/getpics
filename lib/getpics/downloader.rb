@@ -35,7 +35,7 @@ module Getpics
 
         def copy_media
             puts "Copying media..."
-            pb = ProgressBar.create(:title => "Media Copied", :total => @media_list.size)
+            pb = ProgressBar.create(:title => "Media Copied", :total => @media_list.size, :format => '%t: |%b%i| %c/%C %e')
             @media_list.all_known_media.each do |media|
                 if ! File.exists?("#{media.target_path}")
                     pb.log ("Copying #{media.path} to #{media.target_path}").light_black if @verbose
@@ -66,9 +66,10 @@ module Getpics
                 end
                 return if movies_to_process.size == 0
                 puts "Converting movies to MP4..."
-                pb = ProgressBar.create(:title => "Movies Converted", :total => movies_to_process.size)
+                pb = ProgressBar.create(:title => "Movies Converted", :total => movies_to_process.size, :format => '%t: |%b%i| %c/%C %e')
                 movies_to_process.each do |movie|
-                    system("#{ffmpeg_path} -i #{movie.target_path} -vcodec copy -acodec copy #{dest_path}")
+                    #system("#{ffmpeg_path} -i #{movie.target_path} -vcodec copy -acodec copy #{dest_path}")
+                    system("#{ffmpeg_path} -i #{movie.target_path} -c:v libx264 -b:v 5200K -maxrate 5200K -bufsize 5200K -c:a aac -b:a 128K -ar 44100 #{dest_path}")
                     pb.increment
                 end
             end
@@ -81,6 +82,11 @@ module Getpics
                     File.delete(movie.target_path)
                 end
             end
+        end
+
+        def has_movies?
+            return true if @media_list.movies.size > 0
+            return false
         end
 
         def delete_media
