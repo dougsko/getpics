@@ -20,7 +20,7 @@ system.
         -c, --convert                    Convert movies to mp4
         -v, --verbose                    Verbose
         -h, --help                       Show this message
-    Version: 0.2.1
+    Version: 0.2.3
 
 ## Contributing
 
